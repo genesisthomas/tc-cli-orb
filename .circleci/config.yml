@@ -3,9 +3,7 @@ version: 2.1
 orbs:
   testcraft: testcraft/testcraft@2.4.7
 jobs:
-  - chrometests:
-      name: "Chrome Tests"
-      run:
+   run:
         docker: 
           - image: 'cimg/base:stable'
           - image: 'circleci/node:latest'
