@@ -1,0 +1,47 @@
+version: 2.1
+
+orbs:
+  testcraft: testcraft/testcraft@2.4.7
+jobs:
+  - chrometests:
+      name: "Chrome Tests"
+      run:
+        docker: 
+          - image: 'cimg/base:stable'
+          - image: 'circleci/node:latest'
+        parameters:
+          user_mail:
+            description: Your user mail
+            type: string
+          auth_token:
+            description: The Unique identifier of your organization. Can be retrieved from the CI/CD integration page in any suite in your TestCraft account
+            type: env_var_name
+            default: AUTH_TOKEN
+          project:
+            description: The Project's name that contains your test suite
+            type: string
+          version:
+            description: The Project's version
+            type: string
+            default: "Base"
+          suite:
+              description: The Suite's name
+              type: string
+          platform:
+              description: The Platform's name where to run the test
+              type: string
+          environment:
+              description: The Environment's name
+              type: string
+        steps:
+          - node/install:
+              install-yarn: true
+              node-version: latest
+          - run:
+              name: install tc-cli
+              command: sudo npm install -g tc-cli
+          - run:
+              name: run suite
+              command: |
+                tc-cli run -u  "${parameters.user_mail}" -t "${parameters.auth_token}}" -p "{parameters.project}" -v "{parameters.version}" -s "{parameters.suite}" -l "{parameters.platform}" -e "{parameters.environment}"
+
